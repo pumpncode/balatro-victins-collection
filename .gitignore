@@ -1,3 +1,6 @@
 VictinsCollection.code-workspace
 .vscode/settings.json
 commit-message.txt
+
+# Binary search temporary files
+.lovelyignore
