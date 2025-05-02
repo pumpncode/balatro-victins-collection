@@ -410,7 +410,7 @@ return {
 		        }
 		    },
             j_vic_neat = {
-				name = "???",
+				name = "Vector (Placeholder?)",
 	        	text = {
 		            "If last {C:attention}winning hand",
                     "was {C:vic_Straight}Straight{},",
@@ -1160,12 +1160,12 @@ return {
 			},
 		},
 		Token = {
-			c_vic_short_rest = {
-				name = "Short Rest",
+			c_vic_long_rest = {
+				name = "Long Rest",
 				text = {
 					"Refreshes {C:blue}Hands{},",
-					"{C:red}Discards{},",
-					"and the {C:attention}deck"
+					"{C:red}Discards{}, and",
+					"the {C:attention}deck"
 				}
 			}
 		}
