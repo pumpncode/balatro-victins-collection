@@ -1,4 +1,4 @@
-VIC_ALPHA_RELEASE = true
+VIC_ALPHA_RELEASE = false
 
 if not VIC_ALPHA_RELEASE then _RELEASE_MODE = false end
 
@@ -29,9 +29,9 @@ SMODS.current_mod.optional_features = {
 }
 
 -- Lib
-local lib_list = {"colours", "keybinds", "ui", "background_colours", "drawsteps"}
+local lib_list = { "colours", "keybinds", "ui", "background_colours", "drawsteps" }
 
-local lib_list_dev = {"focus"}
+local lib_list_dev = { "focus" }
 
 VIC_process_data_by_version(lib_list, lib_list_dev)
 
@@ -46,7 +46,7 @@ for _, lib in ipairs(lib_list) do
 end
 
 -- Hooks
-local hook_list = {"misc_functions", "game", "card", "UI_definitions", "cardarea", "blind", "common_events"}
+local hook_list = { "misc_functions", "game", "card", "UI_definitions", "cardarea", "blind", "common_events" }
 
 for _, hook in ipairs(hook_list) do
     local init, error = SMODS.load_file("hooks/" .. hook .. ".lua") -- NFS.load(SMODS.current_mod.path .. "hooks/" .. hook ..".lua")
@@ -119,7 +119,7 @@ local joker_list = {"up_your_sleeve", "ouroboros", "moody", "trapezist", "dog", 
                     "broken_arm", "growing_tree", "charon", "training_weights", "paranoia", "neat", "syzygy", "stheno", "tower_into_space", "starfish", "goldfish", "clownfish", "terraforming", "binary_star", "quantum_joker", "cosmic_egg", "blue_dwarf", "event_horizon", "red_hand",
                     "humbleing_bundle"}
 
-local joker_list_dev = { "cherry", "golden_ratio", -- "wildheart", -- "h_size_boost",
+local joker_list_dev = { "cherry", "golden_ratio", "jovial_merryment", "brass_knuckles", "nine_lives", -- "wildheart", -- "h_size_boost",
 "fortune_cookie", "chai_tea", "brazilian_miku", "collared", --[["test", "eye_test",]] --[["kill_consume_multiply_joker",]]
                         "joker_devouring_its_son", "butcher_vanity", "copies_commons", "nadia_om", "mammon",
                         "solomon_david", "jagganoth",
@@ -272,15 +272,15 @@ if not VIC_ALPHA_RELEASE then
 
     SMODS.ConsumableType({
         key = 'Zodiac',
-        collection_rows = {6, 6},
+        collection_rows = { 6, 6 },
         primary_colour = G.C.VictinsCollection.OTHERS.Ophiucus, -- HEX('009cfd'),
         secondary_colour = G.C.VictinsCollection.OTHERS.Zodiac, -- HEX("81cefd"),
         loc_txt = {},
         shop_rate = 2
     })
 
-    local zodiac_list = {"aries", "taurus", "gemini", "cancer", "leo", "virgo", "libra", "scorpio", "sagittarius",
-                         "capricorn", "aquarius", "pisces", "ophiucus"}
+    local zodiac_list = { "aries", "taurus", "gemini", "cancer", "leo", "virgo", "libra", "scorpio", "sagittarius",
+        "capricorn", "aquarius", "pisces", "ophiucus" }
 
     for _, zodiac in ipairs(zodiac_list) do
         local zodiac_name = (" " .. zodiac:gsub("_", " ")):gsub("%W%l", string.upper):sub(2)
@@ -298,13 +298,13 @@ end
 -- Tokens
 SMODS.ConsumableType({
     key = 'Token',
-    primary_colour = HEX('e083b0'), -- HEX('009cfd'),
+    primary_colour = HEX('e083b0'),   -- HEX('009cfd'),
     secondary_colour = HEX('8755bf'), -- HEX("81cefd"),
     loc_txt = {},
     shop_rate = 0
 })
 
-local consumable_list = {"long_rest"}
+local consumable_list = { "long_rest" }
 
 local consumable_list_dev = {}
 
@@ -320,7 +320,6 @@ for _, consumable in ipairs(consumable_list) do
         SMODS.Consumable(data)
         sendDebugMessage("VictinsCollection :: Loaded consumable: " .. consumable_name)
     end
-
 end
 
 local set_cost_ref = Card.set_cost
@@ -352,7 +351,6 @@ SMODS.Blind:take_ownership('pillar', {
 })
 
 if not VIC_ALPHA_RELEASE then
-
     -- SMODS.Shader {
     --     key = 'test',
     --     path = 'test.fs',
@@ -443,7 +441,7 @@ if not VIC_ALPHA_RELEASE then
         end,
         loc_vars = function(self, info_queue, center)
             return {
-                vars = {center and center.edition and center.edition.extra.repetitions or self.config.extra.repetitions}
+                vars = { center and center.edition and center.edition.extra.repetitions or self.config.extra.repetitions }
             }
         end
     }
@@ -484,6 +482,72 @@ SMODS.Sticker {
     end
 }
 
+local vic_hungry_difficulty = 1.05
+
+SMODS.Sticker {
+    key = "hungry",
+    atlas = "sticker_atlas",
+    pos = {
+        x = 1,
+        y = 0
+    },
+    badge_colour = HEX('DD5B23'),
+    default_compat = true,
+    sets = {
+        Joker = true
+    },
+    rate = 0.,
+
+    calculate = function(self, card, context)
+        if context.setting_blind and card:can_calculate() and not context.blueprint then
+            local create_hungry_event = function()
+                G.E_MANAGER:add_event(Event({
+                    trigger = 'after',
+                    delay = 0.8,
+                    func = function()
+                        if G.hand_text_area.blind_chips then
+                            local difficulty = vic_hungry_difficulty
+                            local new_chips = math.floor(G.GAME.blind.chips * difficulty)
+                            local mod_text = number_format(
+                                math.floor(G.GAME.blind.chips * difficulty) - G.GAME.blind.chips
+                            )
+                            G.GAME.blind.chips = new_chips
+                            G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
+
+                            local chips_UI = G.hand_text_area.blind_chips
+                            G.FUNCS.blind_chip_UI_scale(G.hand_text_area.blind_chips)
+                            G.HUD_blind:recalculate()
+
+                            attention_text({
+                                text = '+' .. mod_text,
+                                scale = 0.8,
+                                hold = 0.7,
+                                cover = chips_UI.parent,
+                                cover_colour = G.C.RED,
+                                align = 'cm'
+                            })
+
+                            chips_UI:juice_up()
+
+                            play_sound('chips2')
+                        else
+                            return false
+                        end
+                        return true
+                    end
+                }))
+            end
+            create_hungry_event()
+        end
+    end,
+
+    loc_vars = function(self, info_queue, center)
+        return {
+            vars = { vic_hungry_difficulty }
+        }
+    end
+}
+
 -- Tags
 
 -- Registers the atlas
@@ -495,9 +559,9 @@ SMODS.Atlas({
 })
 
 -- Enable or disable additional tags here
-local tag_list = {"foolish", "liquidation", "litter", "satellite", "gift"}
+local tag_list = { "foolish", "liquidation", "litter", "satellite", "gift" }
 
-local tag_list_dev = {"rebate"}
+local tag_list_dev = { "rebate" }
 
 VIC_process_data_by_version(tag_list, tag_list_dev)
 

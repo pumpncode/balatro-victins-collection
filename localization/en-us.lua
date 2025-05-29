@@ -173,6 +173,13 @@ return {
                     "{X:red,C:white} X#2# {} Mult instead"
 		        }
 		    },
+            j_vic_brass_knuckles = {
+				name = "Brass Knuckles",
+	        	text = {
+                    "{X:red,C:white}X#2#{} Mult if you have",
+                    "{C:attention}exactly #1# {X:blue,C:white}Common{C:attention} Jokers",
+		        }
+		    },
             j_vic_jar_of_teeth = {
 				name = "Jar of Teeth",
 	        	text = {
@@ -302,6 +309,22 @@ return {
                     "give them random {C:attention}Enhancements"
 		        }
 		    },
+            j_vic_golden_ratio = {
+				name = "Golden Ratio",
+	        	text = {
+                    "When {C:attention}round ends{},",
+		            "each {C:attention}Ace{}, {C:attention}2{}, {C:attention}3{}, {C:attention}5{}, or {C:attention}8",
+                    "{C:attention}held in hand{} gives {C:money}$#1#",
+		        }
+		    },
+            j_vic_jovial_merryment = {
+				name = "Jovial Merryment",
+	        	text = {
+		            "When you {C:attention}skip a Blind{},",
+                    "{C:attention}get{} a {C:spectral}#1#",
+                    "{C:inactive}(Must have room)",
+		        }
+		    },
             j_vic_starfish = {
                 name = "Starfish",
                 text = {
@@ -324,7 +347,7 @@ return {
                 text = {
                     "{C:mult}+#1#{} Mult per level of all",
                     "poker hands of lower tier",
-                    "{C:inactive}(Currently {V:1}+#2#{C:inactive} Mult)",
+                    "{C:inactive}(#2# {V:1}+#3#{C:inactive} Mult)",
                 }
             },
             j_vic_humbleing_bundle = {
@@ -482,6 +505,17 @@ return {
                 text = {
                     "When {C:attention}round starts{},",
                     "{C:attention}get{} a {C:attention}Flesh{} card",
+                }
+            },
+            j_vic_nine_lives = {
+                name = "Nine Lives",
+                text = {
+                    "After {C:attention}losing{} with",
+                    "{C:attention}no hands remaining{},",
+                    "set {C:blue}Hands{} to {C:attention}1",
+                    --"After scoring your {C:attention}final hand{} and {C:attention}losing{},",
+                    --"set current and maximum {C:blue}Hands{} to {C:attention}1",
+                    "{C:inactive}({C:attention}#1#{C:inactive} lives left)",
                 }
             },
             j_vic_copies_commons = {
@@ -983,6 +1017,13 @@ return {
 					"When {C:attention}round ends{},",
 					"{C:red,E:2}destroy{} this card",
 				}
+			},
+			vic_hungry = {
+				name = "Hungry",
+				text = {
+					"When {C:attention}Blind is selected{},",
+		            "{X:red,C:white} X#1# {} {C:red,E:2}Blind size",
+				}
 			}
 		},
         Tag = {
@@ -1191,6 +1232,7 @@ return {
             zodiac = "Zodiac",
 			token = "Token",
 			vic_temporary = "Temporary",
+            vic_hungry = "Hungry",
 		},
 		quips = {
 			vic_solomon_title_1 = {
